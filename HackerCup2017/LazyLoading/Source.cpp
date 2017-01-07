@@ -5,9 +5,9 @@
 #include <cstdio>
 #include <algorithm>
 
-int length = 11;
+int length;
 int items[101];
-int taken[101];
+int table[101][101];
 
 int recu(int index, int left)
 {
@@ -17,19 +17,20 @@ int recu(int index, int left)
     }
 
     if (index >= length) {
-        return 0; // TODO: Review if it is ok that the left items will need to be added to any of the other bags.
+        return 0; // It does not matter if there are left items, they can be added to any existing bag.
     }
 
-    int bags = 0;
+    // Calculate needed items if item[index] is at the top of the bag.
     int needed = (50 + items[index] - 1) / items[index];
+
     if (left >= needed)
     {
         return std::max(
-            recu(index + 1, left - needed) + 1,
-            recu(index + 1, left));
+            table[index + 1][left - needed] + 1,
+            table[index + 1][left]);
     }
 
-    return recu(index + 1, left);
+    return table[index + 1][left];
 }
 
 int solveDay()
@@ -40,7 +41,25 @@ int solveDay()
         scanf("%d", &items[i]);
     }
 
-    return recu(0, length);
+    for (int index = length; index >= 0; index--)
+    {
+        for (int left = 0; left <= length; left++)
+        {
+            table[index][left] = recu(index, left);
+        }
+    }
+
+    //// Only for debugging purposes.
+    //for (int index = 0; index < length; index++)
+    //{
+    //    for (int left = 0; left <= length; left++)
+    //    {
+    //        printf("%2d ", table[index][left]);
+    //    }
+    //    printf("\n");
+    //}
+
+    return table[0][length];
 }
 
 int main()
