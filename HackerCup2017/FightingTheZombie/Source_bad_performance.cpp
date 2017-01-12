@@ -5,68 +5,76 @@
 #include <algorithm>
 #include <cstdio>
 
+struct DiceResult
+{
+    double good;
+    double bad;
+};
+
 int minimumDamage;
 int adjustedDamage = 20;
 double bestProbability;
 int X; // roll X times
 int Y; // a Y-sided dice
 
-// f(D, K)
-// D: number of dice
-// K: damage
-double matrix[21][20001];
-
-double f(int D, int K)
+DiceResult rollDice(int index, double sum)
 {
-    if (K <= 0)
+    DiceResult result;
+    result.good = 0;
+    result.bad = 0;
+
+    if (index >= X)
     {
-        return 1;
+        return result;
     }
 
-    if (K > 0 && D == 0)
+    double min = sum + (X - index) * 1;
+    double max = sum + (X - index) * Y;
+
+    if (max < adjustedDamage)
     {
-        return 0;
+        // all are bad
+        result.bad += std::pow(Y, X - index);
+        return result;
     }
 
-    if (adjustedDamage > X * Y)
+    if (min >= adjustedDamage)
     {
-        return 0;
+        // all are good
+        result.good += std::pow(Y, X - index);
+        return result;
     }
 
-    double sum = 0;
     for (int y = 1; y <= Y; y++)
     {
-        if ((K - y) <= 0)
+        if (index == X - 1)
         {
-            sum += 1;
-        }
-        else if ((K - y) > 0 && (D - 1) == 0)
-        {
-            sum += 0;
-        }
-        else if (adjustedDamage > X * Y)
-        {
-            sum += 0;
+            if (sum + y < adjustedDamage)
+            {
+                result.bad++;
+            }
+            else
+            {
+                result.good++;
+            }
         }
         else
         {
-            sum += matrix[D - 1][K - y];
+            DiceResult loopResult = rollDice(index + 1, sum + y);
+            result.good += loopResult.good;
+            result.bad += loopResult.bad;
         }
     }
 
-    return (1.0 / (double)Y) * sum;
+    return result;
 }
 
-double getProbability(int D, int K)
+double calculateProbability()
 {
-    for (int d = 0; d <= D; d++)
-    {
-        for (int k = 0; k <= K; k++)
-        {
-            matrix[d][k] = f(d, k);
-        }
-    }
-    return matrix[D][K];
+    DiceResult result = rollDice(0, 0);
+    double total = result.good + result.bad;
+    double probability = result.good / total;
+    return probability;
 }
 
 void parseSpell(char* spell)
@@ -107,7 +115,7 @@ int main()
         {
             scanf("%s", spell);
             parseSpell(spell);
-            double loopProbability = getProbability(X, adjustedDamage);
+            double loopProbability = calculateProbability();
             if (loopProbability > bestProbability)
             {
                 bestProbability = loopProbability;
