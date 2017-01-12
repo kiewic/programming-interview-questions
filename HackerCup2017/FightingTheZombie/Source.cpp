@@ -59,6 +59,12 @@ double f(int D, int K)
 
 double getProbability(int D, int K)
 {
+    // We can always do at least zero damage.
+    if (K <= 0)
+    {
+        return 1;
+    }
+
     for (int d = 0; d <= D; d++)
     {
         for (int k = 0; k <= K; k++)
@@ -66,6 +72,7 @@ double getProbability(int D, int K)
             matrix[d][k] = f(d, k);
         }
     }
+
     return matrix[D][K];
 }
 
