@@ -6,6 +6,13 @@
 * 30: Lazy Loading 
 * 45: Fighting the Zombie 
 
+## Round 1
+
+* 10: Pie Progress
+* 25: Fighting the Zombies
+* 25: Manic Moving
+* 40: Beach Umbrellas
+
 ## Qualification Round Solutions
 
 The problems for this round were written by Wesley May.
