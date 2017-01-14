@@ -11,6 +11,9 @@ int N; // number of days
 int M; // number of pies on each day
 int C[302][302];
 
+int matrix[302][302];
+
+//            1-N              0-N
 int recu(int currentDay, int takenPies)
 {
     if (currentDay > N)
@@ -23,27 +26,7 @@ int recu(int currentDay, int takenPies)
         return 0;
     }
 
-    int min = MAX_COST;
-
-    // We can take zero pies this day, only if wa have
-    // taken more pies with anticipation.
-    if (takenPies >= currentDay)
-    {
-        min = recu(currentDay + 1, takenPies);
-    }
-
-    int piesTotalToday = 0;
-    for (int m = 1; m <= M && takenPies + m <= N; m++)
-    {
-        piesTotalToday += C[currentDay][m];
-        int temp = recu(currentDay + 1, takenPies + m) + piesTotalToday + (int)std::pow(m, 2);
-        if (temp < min)
-        {
-            min = temp;
-        }
-    }
-
-    return min;
+    return matrix[currentDay][takenPies];
 }
 
 int solveSpree()
@@ -60,7 +43,35 @@ int solveSpree()
         std::sort(C[n] + 1, C[n] + M + 1);
     }
 
-    return recu(1, 0);
+    for (int currentDay = N; currentDay >= 1; currentDay--)
+    {
+        for (int takenPies = N; takenPies >= 0; takenPies--)
+        {
+            int min = MAX_COST;
+
+            // We can take zero pies this day, only if we have
+            // taken more pies with anticipation.
+            if (takenPies >= currentDay)
+            {
+                min = recu(currentDay + 1, takenPies);
+            }
+
+            int piesTotalToday = 0;
+            for (int m = 1; m <= M && takenPies + m <= N; m++)
+            {
+                piesTotalToday += C[currentDay][m];
+                int temp = recu(currentDay + 1, takenPies + m) + piesTotalToday + (int)std::pow(m, 2);
+                if (temp < min)
+                {
+                    min = temp;
+                }
+            }
+
+            matrix[currentDay][takenPies] = min;
+        }
+    }
+
+    return matrix[1][0];
 }
 
 int main()
@@ -71,5 +82,4 @@ int main()
     {
         printf("Case #%d: %d\n", t, solveSpree());
     }
-
 }
