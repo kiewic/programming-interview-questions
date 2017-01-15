@@ -31,9 +31,9 @@ int sumInfs(int a, int b)
     return a + b;
 }
 
-int memo[102][4][102];
+int memo[5002][4][102];
 
-//             1-100            0-2           1-100
+//             1-5000            0-2           1-100
 int recu(int nextFamily, int truckLoad, int prevTown)
 {
     int x, y;
@@ -43,31 +43,23 @@ int recu(int nextFamily, int truckLoad, int prevTown)
         return 0;
     }
 
-    if (memo[nextFamily][truckLoad][prevTown] != -1)
-    {
-        return memo[nextFamily][truckLoad][prevTown];
-    }
-
     if (nextFamily <= K && truckLoad == 0)
     {
         // We must pick next family.
-        x = sumInfs(convertDist(dist[prevTown][families[nextFamily][0]]), recu(nextFamily + 1, truckLoad + 1, families[nextFamily][0]));
-        memo[nextFamily][truckLoad][prevTown] = x;
+        x = sumInfs(convertDist(dist[prevTown][families[nextFamily][0]]), memo[nextFamily + 1][truckLoad + 1][families[nextFamily][0]]);
         return x;
     }
 
     if ((nextFamily > K && truckLoad > 0) || truckLoad == 2)
     {
         // We must deliver a load.
-        x = sumInfs(convertDist(dist[prevTown][families[nextFamily - truckLoad][1]]), recu(nextFamily, truckLoad - 1, families[nextFamily - truckLoad][1]));
-        memo[nextFamily][truckLoad][prevTown] = x;
+        x = sumInfs(convertDist(dist[prevTown][families[nextFamily - truckLoad][1]]), memo[nextFamily][truckLoad - 1][families[nextFamily - truckLoad][1]]);
         return x;
     }
 
     // We can load or deliver, whatever is the best.
-    x = sumInfs(convertDist(dist[prevTown][families[nextFamily][0]]), recu(nextFamily + 1, truckLoad + 1, families[nextFamily][0]));
-    y = sumInfs(convertDist(dist[prevTown][families[nextFamily - truckLoad][1]]), recu(nextFamily, truckLoad - 1, families[nextFamily - truckLoad][1]));
-    memo[nextFamily][truckLoad][prevTown] = std::min(x, y);
+    x = sumInfs(convertDist(dist[prevTown][families[nextFamily][0]]), memo[nextFamily + 1][truckLoad + 1][families[nextFamily][0]]);
+    y = sumInfs(convertDist(dist[prevTown][families[nextFamily - truckLoad][1]]), memo[nextFamily][truckLoad - 1][families[nextFamily - truckLoad][1]]);
     return std::min(x, y);
 }
 
@@ -116,24 +108,19 @@ int solveDeliverySchedule()
 
     doFloydWarshall();
 
-    //             1-(K + 1)            0-2           1-100
-    //int recu(int nextFamily, int truckLoad, int prevTown)
-
+    // Dynamic programming
     for (int nextFamily = K + 1; nextFamily >= 1; nextFamily--)
     {
         for (int truckLoad = 0; truckLoad <= 2; truckLoad++)
         {
             for (int prevTown = 1; prevTown <= N; prevTown++)
             {
-                memo[nextFamily][truckLoad][prevTown] = -1;
+                memo[nextFamily][truckLoad][prevTown] = recu(nextFamily, truckLoad, prevTown);
             }
         }
     }
 
-    // int nextFamily, int truckLoad, int prevTown
-
-    int result = recu(1, 0, 1);
-    return result;
+    return memo[1][0][1];
 }
 
 int main()
