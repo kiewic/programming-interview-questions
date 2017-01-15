@@ -2,16 +2,16 @@
 
 ## Qualification Round
 
-* 25: Progress Pie 
-* 30: Lazy Loading 
-* 45: Fighting the Zombie 
+* [25: Progress Pie](https://www.facebook.com/hackercup/problem/1254819954559001/)
+* [30: Lazy Loading](https://www.facebook.com/hackercup/problem/169401886867367/) 
+* [45: Fighting the Zombie](https://www.facebook.com/hackercup/problem/326053454264498/)
 
 ## Round 1
 
-* 10: Pie Progress
-* 25: Fighting the Zombies
-* 25: Manic Moving
-* 40: Beach Umbrellas
+* [10: Pie Progress](https://www.facebook.com/hackercup/problem/1800890323482794/)
+* [25: Fighting the Zombies](https://www.facebook.com/hackercup/problem/235709883547573/)
+* [25: Manic Moving](https://www.facebook.com/hackercup/problem/300438463685411/)
+* [40: Beach Umbrellas](https://www.facebook.com/hackercup/problem/1760870734198100/)
 
 ## Qualification Round Solutions
 
