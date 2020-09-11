@@ -46,7 +46,7 @@ The output should be:
   54     35    0
 ```
 
-Given a coordinate system, a list of nodes and a number K, return the K nodes with the shortest Euclidian distance from the origin (0, 0). For example:
+Given a coordinate system, a list of nodes and a number K, return the K nodes with the shortest Euclidean distance from the origin (0, 0). For example:
 
 ```
 [[1, 2], [-10, 4], [5, 6]]
