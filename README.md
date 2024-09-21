@@ -77,3 +77,17 @@ First pieces cut into 4 + 1
 Second piece cut into 4 + 4 + 1
 Third piece cut into 4 + 3
 ```
+
+# #100DaysOfCode Challenge
+
+## Day 1
+
+[Palindrome Number](https://leetcode.com/problems/palindrome-number/)
+
+## Day 2
+
+[Search Insert Position](https://leetcode.com/problems/search-insert-position/)
+
+## Day 3
+
+[Remove Duplicates from Sorted Array](https://leetcode.com/problems/remove-duplicates-from-sorted-array/)
